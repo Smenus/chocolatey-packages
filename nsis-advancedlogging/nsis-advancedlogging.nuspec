@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>nsis-advancedlogging</id>
-    <version>3.11</version>
+    <version>3.11.0</version>
     <title>Nullsoft Scriptable Install System (Advanced Logging)</title>
     <authors>NSIS Team</authors>
     <owners>Sean Fleming</owners>
@@ -26,13 +26,16 @@ This is the [Advanced Logging Special Build](http://nsis.sourceforge.net/Special
     <copyright>NSIS Contributors</copyright>
     <tags>installer build developer programming</tags>
     <projectSourceUrl>https://sourceforge.net/p/nsis/code/HEAD/tree/</projectSourceUrl>
-    <packageSourceUrl>https://github.com/smenus/chocolatey-packages/tree/master/nsis</packageSourceUrl>
+    <packageSourceUrl>https://github.com/smenus/chocolatey-packages/tree/master/nsis-advancedlogging</packageSourceUrl>
     <docsUrl>http://nsis.sourceforge.net/Support</docsUrl>
     <mailingListUrl>http://nsis.sourceforge.net/Community</mailingListUrl>
     <bugTrackerUrl>http://nsis.sourceforge.net/Bug_Reports</bugTrackerUrl>
     <dependencies>
       <dependency id="chocolatey-core.extension" version="1.4.0" />
-      <dependency id="nsis.install" version="[3.11]" />
+      <dependency id="nsis.install" version="[3.11.0]" />
     </dependencies>
   </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
 </package>
