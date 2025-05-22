@@ -49,7 +49,7 @@ install:
     if (!(Test-Path "$env:nupkg_cache_path")) { mkdir -Force "$env:nupkg_cache_path" }
     @{
       'chocolatey' = $chocoVersion
-      # Uncomment and input the version if you are using any of these in AU scripts
+
       'wormies-au-helpers' = '0.4.1'
       'chocolatey-core.extension' = '1.4.0'
       'chocolatey-community-validation.extension' = '0.2.0'
@@ -76,18 +76,7 @@ build_script:
 - ps: |
     $ErrorActionPreference = 'Continue'
 
-    . ./scripts/EventLogs.ps1
-    Clear-EventLogs
-
     if ($Env:APPVEYOR_PROJECT_NAME  -like '*test*') { ./test_all.ps1 "random $Env:au_test_groups"; return }
-    if (($Env:APPVEYOR_PULL_REQUEST_NUMBER -ne $null) -and ($Env:APPVEYOR_PULL_REQUEST_NUMBER -ne '')) {
-      Set-Service wuauserv -StartupType Manual
-      ./scripts/Test-RepoPackage.ps1 -CleanFiles -TakeScreenshots
-      return
-    } else {
-      # Clean the choco logs as it's quite large
-      rm "$env:ChocolateyInstall\logs\*.log"
-    }
 
     if ( ($Env:APPVEYOR_SCHEDULED_BUILD -ne 'true') -and ($Env:APPVEYOR_FORCED_BUILD -ne 'true') ) {
         switch -regex ($Env:APPVEYOR_REPO_COMMIT_MESSAGE)
@@ -116,7 +105,7 @@ build_script:
     }
 
     ./update_all.ps1 -ForcedPackages $forced
-    Get-EventLogs * | ? Source -eq 'Schannel' | fl * |  out-file eventlogs.txt
+
 on_finish:
 - ps: |
     if (Test-Path $Env:TEMP\chocolatey\au) { 7z a  -mx9 au_temp.7z $Env:TEMP\chocolatey\au\* }
@@ -127,7 +116,6 @@ on_finish:
       'update_info.xml'
       'Update-AUPackages.md'
       'Update-History.md'
-      'eventlogs.txt'
     )
     $paths | ? { Test-Path $_ } | % { Push-AppveyorArtifact $_ }
 #- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
