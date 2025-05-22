@@ -11,10 +11,21 @@ function global:au_GetLatest {
   $url = $release.content.url
   $hash = $release.content.hash.innerText
 
-  $version = $url -split "-" | Select-Object -last 1 -skip 1
+  $version = [version]::Parse( ($url -split "-" | Select-Object -last 1 -skip 1) )
+
+  $major = $version.Major
+  $minor = $version.Minor
+  $build = 0
+  if ($version.Build -ne -1) { $build = $version.Build }
+
+  $normalizedVersion = [version]::new(
+    $major,
+    $minor,
+    $build
+  )
 
   return @{
-    Version = $version
+    Version = $normalizedVersion.ToString()
 
     URL32 = $url
     FileType = 'zip'
